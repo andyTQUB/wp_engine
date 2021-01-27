@@ -456,6 +456,8 @@ function getQSISEnvironment($database=null)
 
     $env = $ENVIRONMENTS[$processed];
 
+    //NEW 27/01
+    $env["dbpswd"] = getPassword($processed);
     $temp["environment"] = $processed;
     $temp["config"] = $env;
 
@@ -594,6 +596,22 @@ function resp_processResponse($cartID,$env)
 @return oci connection object
 </DOC>
 */
+
+function getPassword($name)
+{
+    $PASSWORDS = include(CONFIG_PATH."cred.php");
+
+    if(!isset($PASSWORDS[$name]))
+    {
+        $PASSWORDS = null;
+        throw new RuntimeException("",300);
+    }
+
+    $password = $PASSWORDS[$name];
+    $PASSWORDS = null;
+    return $password;
+}
+
 function db_getConnection($env)
 {
     if
@@ -732,7 +750,6 @@ function db_getSQL($id,$parameters=null)
     {
         throw new RuntimeException("SQL: $id",307);
     }
-
     $sql = $SQL[$id];
 
     if(is_array($parameters))
