@@ -403,8 +403,8 @@ function displayHTML($code,$parameters=null,$headers=true,$title="")
     <html lang="en">
         <head>
             <meta charset="utf-8">
-            <link href='/engine/bootstrap/css/bootstrap.min.css' type='text/css' rel='stylesheet' >
-            <link href='/engine/styles.css' type='text/css' rel='stylesheet' >
+            <link href='/styles/bootstrap/css/bootstrap.min.css' type='text/css' rel='stylesheet' >
+            <link href='/styles/styles.css' type='text/css' rel='stylesheet' >
             <script src="https://kit.fontawesome.com/3327e774d1.js" crossorigin="anonymous"></script>
             <title>$title</title>
         </head>
