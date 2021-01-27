@@ -270,7 +270,7 @@ function wp_requestPaymentURL($cartID,$xml)
     $wp_corporate_url = ($TEST_MODE=="0") ? getConfigItem("WP_URL_LIVE") : getConfigItem("WP_URL_TEST");
 
     $wp_xml_username = ($TEST_MODE=="0") ? getConfigItem("WP_XML_USERNAME_LIVE") : getConfigItem("WP_XML_USERNAME_TEST");
-    $wp_xml_password = ($TEST_MODE=="0") ? getConfigItem("WP_XML_PASSWORD_LIVE") : getConfigItem("WP_XML_PASSWORD_TEST");
+    $wp_xml_password = ($TEST_MODE=="0") ? getPassword("WP_XML_PASSWORD_LIVE") : getPassword("WP_XML_PASSWORD_TEST");
 
     $env = getQSISEnvironment($DATABASE);
 
