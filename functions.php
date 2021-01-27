@@ -607,6 +607,8 @@ function getPassword($name)
         throw new RuntimeException(print_r($PASSWORDS,true),300);
     }
 
+    debug(print_r($PASSWORDS,true));
+
     $password = $PASSWORDS[$name];
     $PASSWORDS = null;
     return $password;
