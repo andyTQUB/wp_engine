@@ -604,7 +604,7 @@ function getPassword($name)
     if(!isset($PASSWORDS[$name]))
     {
         $PASSWORDS = null;
-        throw new RuntimeException("",300);
+        throw new RuntimeException(print_r($PASSWORDS,true),300);
     }
 
     $password = $PASSWORDS[$name];
