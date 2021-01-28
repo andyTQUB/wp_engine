@@ -178,7 +178,10 @@ $ERROR_MESSAGES[302] = "Couldn't retrieve transaction from database";
 @desc Triggered in db_writeTransaction function. Could not update the ps_qub_wpay_trans table of QSIS database.
 </DOC>
 */
-$ERROR_MESSAGES[303] = "Could not write to database";
+
+define("DEFAULT_DB_ERROR","Could not write to database");
+
+$ERROR_MESSAGES[303] = DEFAULT_DB_ERROR;
 
 /*
 <DOC>
@@ -187,7 +190,7 @@ $ERROR_MESSAGES[303] = "Could not write to database";
 @desc Triggered in db_updateTransactionStatus function. Could not update the ps_qub_wpay_trans table of QSIS database.
 </DOC>
 */
-$ERROR_MESSAGES[304] = "Could not write to database";
+$ERROR_MESSAGES[304] = DEFAULT_DB_ERROR;
 
 /*
 <DOC>
@@ -196,7 +199,7 @@ $ERROR_MESSAGES[304] = "Could not write to database";
 @desc Triggered in db_log function. Could not insert to the ps_qub_wp_translog table of QSIS database.
 </DOC>
 */
-$ERROR_MESSAGES[305] = "Could not write to database";
+$ERROR_MESSAGES[305] = DEFAULT_DB_ERROR;
 
 /*
 <DOC>

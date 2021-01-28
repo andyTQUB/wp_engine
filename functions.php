@@ -87,7 +87,7 @@ function checkParametersAndDatabaseConnection($post)
 
     //Check database connection
     $env = getQSISEnvironment($DATABASE);
-    $conn = db_getConnection($env);
+    db_getConnection($env);
 
     $use_addresses = getConfigItem("WP_QUB_USE_ADDRESSES");
 
@@ -207,20 +207,16 @@ function generateXML($post)
 
     $MERCHANT_CODE = getConfigItem("WP_MERCHANT_CODE",true);
     $CARTID = $post['cartId'];
-    $INSTID = $post['instId']; //getConfigItem("WP_INSTALL_ID");
+    $INSTID = $post['instId'];
     $DESC = $post['desc'];
     $CURRENCY = $post['currency'];
 
     $FIXEDAMOUNT = number_format((float)$post["amount"], 2, '.', '');
     $FIXEDAMOUNT = (int) str_replace(".", "", $FIXEDAMOUNT);
 
-    //$FIXEDAMOUNT = (int) str_replace(".", "", $post['amount']);
-    //$FIXEDAMOUNT = $FIXEDAMOUNT * 100;
     $EMAIL = $post['email'];
     $CDATA = 'Cart ID: '.$post['cartId'].' Amount: '.$post['amount'].' Currency: '.$post['currency'].' Description: '.$post['desc'].' Name: '.$post['name'].' Email: '.$post['email'];
     $ADDRESSFRAGMENT = generateAddressXML($post);
-
-    $NAME = $post["name"];
 
     $env = getQSISEnvironment($DATABASE);
 
@@ -315,7 +311,7 @@ function wp_requestPaymentURL($cartID,$xml)
 
     if($errorCode)
     {
-        throw new RuntimeException("error=".$errorCode." - ".$errorMessage,103);
+        throw new RuntimeException($errorCode." - ".$errorMessage,103);
     }
 
     if(!isset($xmlResult->reply->orderStatus))
@@ -332,11 +328,13 @@ function wp_requestPaymentURL($cartID,$xml)
     db_writeTransaction($conn,$cartID,$transID);
     db_log($cartID,$transID,"TS2 - XML Generated. Worldpay authentication OK",$DATABASE);
 
+    $homepage = "/index.php";
+
     //Add success, cancel, failure and error url to payment url
-    $redirectUrl .= "&successURL=".getConfigItem("RETURN_URL")."/".$DATABASE."/index.php";
-    $redirectUrl .= "&cancelURL=".getConfigItem("RETURN_URL")."/".$DATABASE."/index.php";
-    $redirectUrl .= "&failureURL=".getConfigItem("RETURN_URL")."/".$DATABASE."/index.php";
-    $redirectUrl .= "&errorURL=".getConfigItem("RETURN_URL")."/".$DATABASE."/index.php";
+    $redirectUrl .= "&successURL=".getConfigItem("RETURN_URL")."/".$DATABASE.$homepage;
+    $redirectUrl .= "&cancelURL=".getConfigItem("RETURN_URL")."/".$DATABASE.$homepage;
+    $redirectUrl .= "&failureURL=".getConfigItem("RETURN_URL")."/".$DATABASE.$homepage;
+    $redirectUrl .= "&errorURL=".getConfigItem("RETURN_URL")."/".$DATABASE.$homepage;
 
     return $redirectUrl;
 }
@@ -520,8 +518,7 @@ function resp_generateMAC($get)
         throw new RuntimeException(print_r($get,true),205);
     }
 
-    $mac = hash_hmac('sha256', $string, $secret);
-    return $mac;
+    return hash_hmac('sha256', $string, $secret);
 }
 
 /*
@@ -655,7 +652,7 @@ function db_getTransaction($conn,$cartID)
     $stid = oci_parse($conn,$sql);
     oci_bind_by_name($stid,":cartID",$cartID);
 
-    $result = oci_execute($stid);
+    oci_execute($stid);
 
     $row = oci_fetch_array($stid, OCI_ASSOC);
 
@@ -678,10 +675,11 @@ function db_getTransaction($conn,$cartID)
 */
 function db_writeTransaction($conn,$cartID,$transID)
 {
-    $ip_criteria = null;
+    
 
     //IP Address not required - as specified by Tony McCrory (email 22/10/20)
     /*
+    $ip_criteria = null;
     if(isset($_SERVER["HTTP_X_FORWARDED_FOR"]) && !empty($_SERVER["HTTP_X_FORWARDED_FOR"]))
     {
         $ip_criteria = ", qub_ip_addr = :qub_ip_addr";
@@ -706,7 +704,7 @@ function db_writeTransaction($conn,$cartID,$transID)
 
     if(!$result)
     {
-        throw new RuntimeException("error=".oci_error($stid),303);
+        throw new RuntimeException(oci_error($stid),303);
     }
 }
 
